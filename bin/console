@@ -1,0 +1,37 @@
+#!/usr/local/bin/php
+<?php
+
+use Nette\DI\Compiler;
+use Nette\DI\Container;
+use Nette\DI\ContainerLoader;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+
+if (php_sapi_name() !== 'cli') {
+    exit;
+}
+
+require __DIR__ . '/../vendor/autoload.php';
+
+// create DI container
+$loader = new ContainerLoader(__DIR__ . '/../temp', true);
+$class = $loader->load(function (Compiler $compiler) {
+    $compiler->loadConfig(__DIR__ . '/../config.neon');
+});
+/** @var Container $container */
+$container = new $class;
+
+// ensure log/cache directories exist
+foreach ($container->getParameters() as $param) {
+	if (isset($param['directory']) && !is_dir($param['directory'])) {
+		mkdir($param['directory'], 0755, true);
+	}
+}
+
+// bootstrap application
+$application = new Application();
+$commandNames = $container->findByType(Command::class);
+$commands = array_map(fn($name) => $container->getService($name), $commandNames);
+
+$application->addCommands($commands);
+$application->run();

@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  php:
+    image: devilbox/php-fpm:7.4-prod
+    environment:
+      - TIMEZONE=Europe/Prague
+      - ENABLE_MODULES=xdebug,pdo_mysql,fileinfo,apc,apcu,bcmath,bz2,calendar,filter,ftp,gd,gettext,hash,iconv,imagick,json,libxml,mbstring,mcrypt,mhash,mysqlnd,odbc,pcre,phar,reflection,session,simplexml,spl,standard,tokenizer,wdxx,xml,xmlreader,xmlwriter,recode
+      - DISABLE_MODULES=pdo_oci,amqp,dba,enchant,exif,gmp,igbinary,imap,interbase,intl,ldap,memcache,memcached,mongo,mongodb,msgpack,mysql,mysqli,oci8,openssl,pcntl,pdo_dblib,PDO_Firebird,pdo_pgsql,SQLite,pdo_sqlite,pgsql,phalcon,posix,pspell,rdkafka,readline,redis,shmop,snmp,soap,sockets,sqlite3,swoole,sysvmsg,tidy,uploadprogress,xmlrpc,xsl,sysvsem,sysvshm
+    ports:
+      - 9000:9000 # xdebug
+    volumes:
+      - ~/.composer/cache/files:/root/.composer/cache/files/:cached
+      - ./Docker/php/:/etc/php-custom.d:cached
+      - ./:/var/www/html

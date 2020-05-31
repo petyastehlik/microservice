@@ -1,0 +1,28 @@
+{contentType application/html}
+{varType array $data}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+<body>
+<div>
+    <ul>
+        {block #block}
+            {foreach $data as $key => $value}
+                {if is_array($value)}
+                    <li>{$key}:
+                        <ul>
+                            {include block, data => $value}
+                        </ul>
+                    </li>
+                {else}
+                    <li>{$key}: {$value}</li>
+                {/if}
+            {/foreach}
+        {/block}
+    </ul>
+</div>
+</body>
+</html>

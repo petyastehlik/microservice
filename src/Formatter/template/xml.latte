@@ -1,0 +1,16 @@
+{contentType application/xml}
+{varType array $data}
+<?xml version="1.0" encoding="UTF-8"?>
+<entity>
+    {block #block}
+        {foreach $data as $key => $value}
+            <{$key}>
+                {if is_array($value)}
+                    {include block, data => $value}
+                {else}
+                    {$value}
+                {/if}
+            </{$key}>
+        {/foreach}
+    {/block}
+</entity>

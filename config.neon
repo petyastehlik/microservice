@@ -1,0 +1,33 @@
+parameters:
+	api:
+		base_uri: https://jsonplaceholder.typicode.com/
+		timeout: 30.0
+	cache:
+		path: ./temp/cache/
+		default_ttl: 5
+	logger:
+		directory: ./log/
+	output:
+		directory: ./temp/output/
+
+services:
+	- Betsys\API\Client(%api%)
+	- Betsys\API\ResponseParser
+	- Betsys\API\Enricher
+
+	- Betsys\Blog\BlogFacade(@Kodus\Cache\FileCache)
+
+	- Betsys\Command\StoreCommand
+	- Betsys\Command\FormatArgumentParser
+	- Betsys\Command\EntityArgumentParser
+
+	- Betsys\Formatter\FormatterService
+	- Betsys\Formatter\TemplateBasedFormatterFactory
+
+	- Betsys\Storage\FileSystemStorage
+	- Betsys\Storage\FileManager(%output.directory%, ...)
+	- Betsys\Storage\StorageService(@Betsys\Storage\FileSystemStorage)
+
+	- Kodus\Cache\FileCache(%cache.path%, %cache.default_ttl%)
+
+	- Tracy\Logger(%logger.directory%)
