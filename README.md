@@ -54,3 +54,4 @@ make test
 - Finish unit tests marked as incomplete 
 - Improve docker-compose.yml, use more suitable image (php:7.4-cli-alpine3.11) with smaller footprint
 - Rest of TODOs can be found directly in code
+- Add better error handling inside Betsys/Formatter namespace
